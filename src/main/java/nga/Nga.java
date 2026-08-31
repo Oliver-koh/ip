@@ -42,7 +42,7 @@ public class Nga {
                 unmarkTask(command.substring(7).trim(), tasks, numberOfTasks);
             } else if (!command.isEmpty()) {
                 if (numberOfTasks == MAXIMUM_TASKS) {
-                    System.out.println(" The task list is full.");
+                    System.out.println(" Task list is full gang.");
                 } else {
                     tasks[numberOfTasks] = new Task(command);
                     numberOfTasks++;
@@ -62,7 +62,7 @@ public class Nga {
 
     /** Prints all tasks with their current completion markers. */
     private void printTasks(Task[] tasks, int numberOfTasks) {
-        System.out.println(" Here are the tasks in your list:");
+        System.out.println(" these they tasks in yo list:");
         for (int i = 0; i < numberOfTasks; i++) {
             System.out.println(" " + (i + 1) + "." + tasks[i]);
         }
@@ -73,16 +73,16 @@ public class Nga {
         try {
             int index = Integer.parseInt(taskNumber) - 1;
             if (index < 0 || index >= numberOfTasks) {
-                System.out.println(" That task number does not exist.");
+                System.out.println(" That task num don't exist sonnyboy.");
                 return;
             }
 
             Task task = tasks[index];
             task.markAsDone();
-            System.out.println(" Nice! I've marked this task as done:");
+            System.out.println(" Say less twin. Checked this task off:");
             System.out.println("   " + task);
         } catch (NumberFormatException exception) {
-            System.out.println(" Please provide a task number, such as: mark 2");
+            System.out.println(" Provide a task number gang, like: mark 2 or sumn");
         }
     }
 
@@ -91,16 +91,16 @@ public class Nga {
         try {
             int index = Integer.parseInt(taskNumber) - 1;
             if (index < 0 || index >= numberOfTasks) {
-                System.out.println(" That task number does not exist.");
+                System.out.println(" That task number don't exist.");
                 return;
             }
 
             Task task = tasks[index];
             task.markAsUndone();
-            System.out.println(" OK, I've marked this task as not done yet:");
+            System.out.println(" Aite, marked this task as not done yet:");
             System.out.println("   " + task);
         } catch (NumberFormatException exception) {
-            System.out.println(" Please provide a task number, such as: unmark 2");
+            System.out.println(" Provide a task number, like : unmark 2 or sumn");
         }
     }
 
@@ -112,7 +112,6 @@ public class Nga {
                 + "| | | | (_| | (_| |\n"
                 + "|_| |_|\\__, |\\__,_|\n"
                 + "       |___/         \n"
-                + "Hello! I'm Nga.\n"
                 + "wsg gang\n"
                 + DIVIDER;
     }
