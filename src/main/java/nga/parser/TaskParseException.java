@@ -1,4 +1,4 @@
-package nga;
+package nga.parser;
 
 /** Indicates that a user command does not match the expected task format. */
 public class TaskParseException extends Exception {

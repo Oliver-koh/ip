@@ -1,4 +1,4 @@
-package nga;
+package nga.task;
 
 /** Stores tasks and translates user-facing task numbers into array indexes. */
 public class TaskList {

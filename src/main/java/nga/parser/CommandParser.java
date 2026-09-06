@@ -1,4 +1,4 @@
-package nga;
+package nga.parser;
 
 /** Extracts a command word and its arguments from one input line. */
 public final class CommandParser {

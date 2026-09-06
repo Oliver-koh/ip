@@ -1,4 +1,4 @@
-package nga;
+package nga.task;
 
 /**
  * Represents a task in Nga's task list.

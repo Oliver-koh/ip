@@ -1,4 +1,11 @@
-package nga;
+package nga.command;
+
+import nga.parser.CommandParser;
+import nga.parser.ParsedCommand;
+import nga.parser.TaskParseException;
+import nga.parser.TaskParser;
+import nga.task.Task;
+import nga.task.TaskList;
 
 /** Executes commands against the task list without reading console input. */
 public class NgaCommandHandler {

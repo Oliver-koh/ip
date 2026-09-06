@@ -1,4 +1,4 @@
-package nga;
+package nga.task;
 
 /**
  * Represents a task without a date or time attached to it.

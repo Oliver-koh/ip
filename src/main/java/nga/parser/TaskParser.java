@@ -1,4 +1,9 @@
-package nga;
+package nga.parser;
+
+import nga.task.Deadline;
+import nga.task.Event;
+import nga.task.Task;
+import nga.task.Todo;
 
 /**
  * Creates task objects from the commands entered by the user.

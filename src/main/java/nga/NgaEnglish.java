@@ -1,5 +1,8 @@
 package nga;
 
+import nga.command.NgaCommandHandler;
+import nga.ui.NgaUi;
+
 /** Starts Nga using the same separated UI and command-handling layers. */
 public class NgaEnglish {
     /** Starts the English-language entry point. */

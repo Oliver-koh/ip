@@ -1,4 +1,4 @@
-package nga;
+package nga.task;
 
 /**
  * Represents a task with a start date/time and an end date/time.

@@ -1,6 +1,10 @@
-package nga;
+package nga.ui;
 
 import java.util.Scanner;
+
+import nga.command.CommandResult;
+import nga.command.NgaCommandHandler;
+import nga.parser.TaskParseException;
 
 /** Reads console input and displays responses from the command handler. */
 public class NgaUi {
