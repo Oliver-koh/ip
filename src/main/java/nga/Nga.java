@@ -36,18 +36,24 @@ public class Nga {
                 return;
             } else if (command.equals("list")) {
                 printTasks(tasks, numberOfTasks);
+            } else if (command.equals("help")) {
+                printHelp();
             } else if (command.startsWith("mark ")) {
                 markTask(command.substring(5).trim(), tasks, numberOfTasks);
             } else if (command.startsWith("unmark ")) {
                 unmarkTask(command.substring(7).trim(), tasks, numberOfTasks);
             } else if (!command.isEmpty()) {
-                if (numberOfTasks == MAXIMUM_TASKS) {
+                Task task = TaskParser.createTask(command);
+                if (task == null) {
+                    // TaskParser reports the expected format for malformed typed commands.
+                } else if (numberOfTasks == MAXIMUM_TASKS) {
                     System.out.println(" Task list is full gang.");
                 } else {
-                    tasks[numberOfTasks] = new Task(command);
+                    tasks[numberOfTasks] = task;
                     numberOfTasks++;
-                    System.out.println(" " + command);
-                    System.out.println(" added: " + command);
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("   " + task);
+                    System.out.println(" Now you have " + numberOfTasks + " tasks in the list.");
                 }
             }
 
@@ -66,6 +72,27 @@ public class Nga {
         for (int i = 0; i < numberOfTasks; i++) {
             System.out.println(" " + (i + 1) + "." + tasks[i]);
         }
+    }
+
+    /** Prints the available commands and their expected formats. */
+    private void printHelp() {
+        System.out.println(" Available commands:");
+        System.out.println("   list");
+        System.out.println("       Lists all tasks.");
+        System.out.println("   todo <description>");
+        System.out.println("       Adds a todo task.");
+        System.out.println("   deadline <description> /by <date or time>");
+        System.out.println("       Adds a deadline.");
+        System.out.println("   event <description> /from <start> /to <end>");
+        System.out.println("       Adds an event.");
+        System.out.println("   mark <task number>");
+        System.out.println("       Marks a task as done.");
+        System.out.println("   unmark <task number>");
+        System.out.println("       Marks a task as not done.");
+        System.out.println("   help");
+        System.out.println("       Shows this command guide.");
+        System.out.println("   bye");
+        System.out.println("       Exits Nga.");
     }
 
     /** Marks a one-based task number as done and reports the updated task. */

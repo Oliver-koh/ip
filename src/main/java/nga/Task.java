@@ -1,7 +1,11 @@
 package nga;
 
 /**
- * Represents one task in Nga's task list.
+ * Represents a task in Nga's task list.
+ *
+ * <p>This class stores the behavior shared by all task types. Subclasses can
+ * provide their own task type label and additional details while reusing the
+ * completion state and description handling.</p>
  */
 public class Task {
     private final String description;
@@ -33,9 +37,21 @@ public class Task {
         return description;
     }
 
+    /**
+     * Returns the one-letter label used for this task type.
+     *
+     * <p>The base task is treated as a ToDo for now. Specific task subclasses
+     * can override this method when they are added.</p>
+     *
+     * @return the task type label
+     */
+    public String getTaskType() {
+        return "T";
+    }
+
     /** Returns this task in the format used by the chatbot. */
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        return "[" + getTaskType() + "][" + getStatusIcon() + "] " + description;
     }
 }
