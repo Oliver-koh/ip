@@ -11,36 +11,53 @@ public final class TaskParser {
     /**
      * Creates a task from a typed command.
      *
-     * @param command the complete command entered by the user
-     * @return the corresponding task, or {@code null} for an invalid typed command
+     * @param keyword the command word
+     * @param arguments the text after the command word
+     * @return the corresponding task
+     * @throws TaskParseException if a required field is missing
      */
-    public static Task createTask(String command) {
-        if (command.startsWith("todo ")) {
-            return new Todo(command.substring(5).trim());
-        }
+    public static Task createTask(String keyword, String arguments) throws TaskParseException {
+        return switch (keyword) {
+        case "todo" -> createTodo(arguments);
+        case "deadline" -> createDeadline(arguments);
+        case "event" -> createEvent(arguments);
+        default -> throw new TaskParseException(" Unknown task command.");
+        };
+    }
 
-        if (command.startsWith("deadline ")) {
-            int byIndex = command.indexOf(" /by ");
-            if (byIndex > 9 && byIndex + 5 < command.length()) {
-                return new Deadline(command.substring(9, byIndex).trim(), command.substring(byIndex + 5).trim());
-            }
-            System.out.println(" Use: deadline task description /by date or time");
-            return null;
+    /** Creates a todo and rejects an empty description. */
+    public static Task createTodo(String description) throws TaskParseException {
+        if (description.isBlank()) {
+            throw new TaskParseException(" Todo description cannot be empty. Please enter something.");
         }
+        return new Todo(description.trim());
+    }
 
-        if (command.startsWith("event ")) {
-            int fromIndex = command.indexOf(" /from ");
-            int toIndex = command.indexOf(" /to ");
-            if (fromIndex > 6 && toIndex > fromIndex + 7 && toIndex + 4 < command.length()) {
-                String description = command.substring(6, fromIndex).trim();
-                String from = command.substring(fromIndex + 7, toIndex).trim();
-                String to = command.substring(toIndex + 4).trim();
-                return new Event(description, from, to);
-            }
-            System.out.println(" Use: event task description /from start /to end");
-            return null;
+    private static Task createDeadline(String arguments) throws TaskParseException {
+        int byIndex = arguments.indexOf(" /by ");
+        if (byIndex <= 0 || byIndex + 5 >= arguments.length()) {
+            throw new TaskParseException(" Use: deadline task description /by date or time");
         }
+        String description = arguments.substring(0, byIndex).trim();
+        String by = arguments.substring(byIndex + 5).trim();
+        if (description.isEmpty() || by.isEmpty()) {
+            throw new TaskParseException(" Use: deadline task description /by date or time");
+        }
+        return new Deadline(description, by);
+    }
 
-        return new Todo(command);
+    private static Task createEvent(String arguments) throws TaskParseException {
+        int fromIndex = arguments.indexOf(" /from ");
+        int toIndex = arguments.indexOf(" /to ");
+        if (fromIndex <= 0 || toIndex <= fromIndex + 7 || toIndex + 4 >= arguments.length()) {
+            throw new TaskParseException(" Use: event task description /from start /to end");
+        }
+        String description = arguments.substring(0, fromIndex).trim();
+        String from = arguments.substring(fromIndex + 7, toIndex).trim();
+        String to = arguments.substring(toIndex + 4).trim();
+        if (description.isEmpty() || from.isEmpty() || to.isEmpty()) {
+            throw new TaskParseException(" Use: event task description /from start /to end");
+        }
+        return new Event(description, from, to);
     }
 }
