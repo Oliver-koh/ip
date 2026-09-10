@@ -36,21 +36,12 @@ public class NgaCommandHandler {
         case "mark" -> updateTask(command.arguments(), true);
         case "unmark" -> updateTask(command.arguments(), false);
         case "todo", "deadline", "event" -> addTask(command);
-        default -> addUnprefixedTodo(command.original());
+        default -> new CommandResult(false, " Unknown command. Type 'help' to see the available commands.");
         };
     }
 
     private CommandResult addTask(ParsedCommand command) throws TaskParseException {
         Task task = TaskParser.createTask(command.keyword(), command.arguments());
-        if (taskList.isFull()) {
-            return new CommandResult(false, " The task list is full.");
-        }
-        taskList.add(task);
-        return addedTaskMessage(task);
-    }
-
-    private CommandResult addUnprefixedTodo(String description) throws TaskParseException {
-        Task task = TaskParser.createTodo(description);
         if (taskList.isFull()) {
             return new CommandResult(false, " The task list is full.");
         }

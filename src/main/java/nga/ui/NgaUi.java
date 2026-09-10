@@ -36,6 +36,8 @@ public class NgaUi {
                 }
             } catch (TaskParseException exception) {
                 System.out.println(exception.getMessage());
+            } catch (RuntimeException exception) {
+                System.out.println(" Something went wrong while processing that command. Please try again.");
             }
             System.out.println(DIVIDER);
         }
