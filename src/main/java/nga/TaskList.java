@@ -46,4 +46,9 @@ public class TaskList {
         }
         return tasks.remove(taskNumber - 1);
     }
+
+    /** Removes all stored tasks from the list. */
+    public void clear() {
+        tasks.clear();
+    }
 }

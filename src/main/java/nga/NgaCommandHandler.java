@@ -10,8 +10,17 @@ public class NgaCommandHandler {
             + "   mark <task number>\n       Marks a task as done.\n"
             + "   unmark <task number>\n       Marks a task as not done.\n"
             + "   delete <task number>\n       Deletes a task.\n"
+            + "   delete all\n       Deletes all tasks.\n"
+            + "   clear\n       Deletes all tasks.\n"
             + "   help\n       Shows this command guide.\n"
-            + "   bye\n       Exits Nga.";
+            + "   bye\n       Exits Nga.\n"
+            + "\n Tasks are saved automatically in data/nga.txt.\n"
+            + "\n To build the executable JAR, run:\n"
+            + "   gradle shadowJar\n"
+            + "\n To run the JAR from the project root, run:\n"
+            + "   java -jar build/libs/nga-all.jar";
+    private static final String UNKNOWN_COMMAND =
+            " Start command with a prefix/header. Use help for available commands and format.";
     private final TaskList taskList;
     private final Storage storage;
 
@@ -36,23 +45,15 @@ public class NgaCommandHandler {
         case "help" -> new CommandResult(false, HELP);
         case "mark" -> updateTask(command.arguments(), true);
         case "unmark" -> updateTask(command.arguments(), false);
-        case "delete" -> deleteTask(command.arguments());
+        case "delete" -> deleteCommand(command.arguments());
+        case "clear" -> clearTasks(command.arguments());
         case "todo", "deadline", "event" -> addTask(command);
-        default -> addUnprefixedTodo(command.original());
+        default -> new CommandResult(false, UNKNOWN_COMMAND);
         };
     }
 
     private CommandResult addTask(ParsedCommand command) throws TaskParseException {
         Task task = TaskParser.createTask(command.keyword(), command.arguments());
-        if (taskList.isFull()) {
-            return new CommandResult(false, " The task list is full.");
-        }
-        taskList.add(task);
-        return savedResult(addedTaskMessage(task));
-    }
-
-    private CommandResult addUnprefixedTodo(String description) throws TaskParseException {
-        Task task = TaskParser.createTodo(description);
         if (taskList.isFull()) {
             return new CommandResult(false, " The task list is full.");
         }
@@ -84,7 +85,10 @@ public class NgaCommandHandler {
         }
     }
 
-    private CommandResult deleteTask(String argument) {
+    private CommandResult deleteCommand(String argument) {
+        if ("all".equalsIgnoreCase(argument)) {
+            return clearTasks("");
+        }
         try {
             int taskNumber = Integer.parseInt(argument);
             if (!taskList.hasTaskNumber(taskNumber)) {
@@ -96,6 +100,16 @@ public class NgaCommandHandler {
         } catch (NumberFormatException exception) {
             return new CommandResult(false, " Please provide a task number.");
         }
+    }
+
+    private CommandResult clearTasks(String argument) {
+        if (!argument.isEmpty()) {
+            return new CommandResult(false, " The clear command does not take any arguments.");
+        }
+        int deletedTaskCount = taskList.size();
+        taskList.clear();
+        return savedResult(new CommandResult(false, " Noted. I've removed all " + deletedTaskCount
+                + " tasks from your list."));
     }
 
     private String formatTasks() {
