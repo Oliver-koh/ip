@@ -27,13 +27,16 @@ public final class TaskParser {
 
     /** Creates a todo and rejects an empty description. */
     public static Task createTodo(String description) throws TaskParseException {
-        if (description.isBlank()) {
+        if (description == null || description.isBlank()) {
             throw new TaskParseException(" Todo description cannot be empty. Please enter something.");
         }
         return new Todo(description.trim());
     }
 
     private static Task createDeadline(String arguments) throws TaskParseException {
+        if (arguments == null) {
+            throw new TaskParseException(" Use: deadline task description /by date or time");
+        }
         int byIndex = arguments.indexOf(" /by ");
         if (byIndex <= 0 || byIndex + 5 >= arguments.length()) {
             throw new TaskParseException(" Use: deadline task description /by date or time");
@@ -47,6 +50,9 @@ public final class TaskParser {
     }
 
     private static Task createEvent(String arguments) throws TaskParseException {
+        if (arguments == null) {
+            throw new TaskParseException(" Use: event task description /from start /to end");
+        }
         int fromIndex = arguments.indexOf(" /from ");
         int toIndex = arguments.indexOf(" /to ");
         if (fromIndex <= 0 || toIndex <= fromIndex + 7 || toIndex + 4 >= arguments.length()) {

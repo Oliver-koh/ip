@@ -5,6 +5,11 @@ import java.util.Scanner;
 /** Reads console input and displays responses from the command handler. */
 public class NgaUi {
     private static final String DIVIDER = "____________________________________________________________";
+    private static final String LOGO = "    _ __   __ _  __ _\n"
+            + "   | '_ \\ / _` |/ _` |\n"
+            + "   | | | | (_| | (_| |\n"
+            + "   |_| |_|\\__, |\\__,_|\n"
+            + "          |___/";
     private final NgaCommandHandler commandHandler;
     private final Scanner scanner;
 
@@ -21,7 +26,7 @@ public class NgaUi {
 
     /** Runs the console interaction until the user exits or input ends. */
     public void run() {
-        System.out.println(DIVIDER + "\nHello! I'm Nga.\n" + DIVIDER);
+        System.out.println(LOGO + "\n" + DIVIDER + "\nHello! I'm Nga.\n" + DIVIDER);
         while (scanner.hasNextLine()) {
             System.out.println(DIVIDER);
             try {
@@ -32,6 +37,8 @@ public class NgaUi {
                 }
             } catch (TaskParseException exception) {
                 System.out.println(exception.getMessage());
+            } catch (RuntimeException exception) {
+                System.out.println(" Sorry, Nga could not complete that command.");
             }
             System.out.println(DIVIDER);
         }

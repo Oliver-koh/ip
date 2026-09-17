@@ -7,7 +7,7 @@ public final class CommandParser {
 
     /** Parses one input line without executing it. */
     public static ParsedCommand parse(String input) {
-        String original = input.trim();
+        String original = input == null ? "" : input.trim();
         if (original.isEmpty()) {
             return new ParsedCommand("", "", original);
         }
