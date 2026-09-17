@@ -17,6 +17,12 @@ public class Deadline extends Task {
         return by;
     }
 
+    /** Returns the deadline details used to identify duplicate tasks. */
+    @Override
+    protected String getDuplicateKey() {
+        return super.getDuplicateKey() + "|" + by;
+    }
+
     /** Returns the type label for a deadline. */
     @Override
     public String getTaskType() {

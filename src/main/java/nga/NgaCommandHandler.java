@@ -54,6 +54,11 @@ public class NgaCommandHandler {
 
     private CommandResult addTask(ParsedCommand command) throws TaskParseException {
         Task task = TaskParser.createTask(command.keyword(), command.arguments());
+        int duplicateTaskNumber = taskList.findDuplicateTaskNumber(task);
+        if (duplicateTaskNumber != -1) {
+            return new CommandResult(false, " This task already exists at index " + duplicateTaskNumber
+                    + ":\n   " + taskList.getTask(duplicateTaskNumber));
+        }
         if (taskList.isFull()) {
             return new CommandResult(false, " The task list is full.");
         }

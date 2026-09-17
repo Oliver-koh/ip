@@ -24,6 +24,12 @@ public class Event extends Task {
         return to;
     }
 
+    /** Returns the event details used to identify duplicate tasks. */
+    @Override
+    protected String getDuplicateKey() {
+        return super.getDuplicateKey() + "|" + from + "|" + to;
+    }
+
     /** Returns the type label for an event. */
     @Override
     public String getTaskType() {

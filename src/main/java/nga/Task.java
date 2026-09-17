@@ -42,6 +42,11 @@ public class Task {
         return description;
     }
 
+    /** Returns the task details used to identify duplicate tasks. */
+    protected String getDuplicateKey() {
+        return getTaskType() + "|" + description;
+    }
+
     /**
      * Returns the one-letter label used for this task type.
      *

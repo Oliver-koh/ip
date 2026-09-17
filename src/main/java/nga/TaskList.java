@@ -26,6 +26,21 @@ public class TaskList {
         tasks.add(task);
     }
 
+    /**
+     * Returns the one-based number of the first task with the same details, or -1 if none exists.
+     *
+     * @param task the task to look up
+     * @return the existing task's one-based number, or -1
+     */
+    public int findDuplicateTaskNumber(Task task) {
+        for (int index = 0; index < tasks.size(); index++) {
+            if (tasks.get(index).getDuplicateKey().equals(task.getDuplicateKey())) {
+                return index + 1;
+            }
+        }
+        return -1;
+    }
+
     /** Returns whether the one-based number identifies a stored task. */
     public boolean hasTaskNumber(int taskNumber) {
         return taskNumber >= 1 && taskNumber <= tasks.size();
