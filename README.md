@@ -1,6 +1,7 @@
-# nga project
+# NGA project
 
-This is a Java command-line application named _nga_. The project uses Gradle and the
+NGA stands for **No Goobers Allowed**. This is a Java command-line application named
+_nga_ that helps users manage a task list. The project uses Gradle and the
 Shadow plugin to create an executable fat JAR.
 
 ## Setting up in Intellij
@@ -22,6 +23,8 @@ Prerequisites: JDK 21 and Gradle 9.2 or later. Update IntelliJ to the most recen
    |_| |_|\__, |\__,_|
           |___/
     ```
+
+    The greeting also explains the project name: NGA means **No Goobers Allowed**.
 
 ## Creating, rebuilding, and running the fat JAR
 

@@ -1,6 +1,7 @@
-# nga User Guide
+# NGA User Guide
 
-// Update the title above to match the actual product name
+NGA stands for **No Goobers Allowed**. NGA is a command-line task manager for
+keeping track of todos, deadlines, and events.
 
 // Product screenshot goes here
 

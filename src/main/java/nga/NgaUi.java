@@ -26,7 +26,8 @@ public class NgaUi {
 
     /** Runs the console interaction until the user exits or input ends. */
     public void run() {
-        System.out.println(LOGO + "\n" + DIVIDER + "\nHello! I'm Nga.\n" + DIVIDER);
+        System.out.println(LOGO + "\n" + DIVIDER
+                + "\nHello! I'm Nga (No Goobers Allowed).\n" + DIVIDER);
         while (scanner.hasNextLine()) {
             System.out.println(DIVIDER);
             try {

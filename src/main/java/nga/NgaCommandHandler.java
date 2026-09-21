@@ -2,7 +2,8 @@ package nga;
 
 /** Executes commands against the task list without reading console input. */
 public class NgaCommandHandler {
-    private static final String HELP = " Available commands:\n"
+    private static final String HELP = " NGA means No Goobers Allowed.\n\n"
+            + " Available commands:\n"
             + "   list\n       Lists all tasks.\n"
             + "   todo <description>\n       Adds a todo task.\n"
             + "   deadline <description> /by <date or time>\n       Adds a deadline.\n"
