@@ -41,7 +41,7 @@ public class NgaCommandHandler {
         ParsedCommand command = CommandParser.parse(input);
         return switch (command.keyword()) {
         case "" -> new CommandResult(false, " Please enter something.");
-        case "bye" -> new CommandResult(true, "Peace out");
+        case "bye" -> new ExitCommand().execute(taskList, storage);
         case "list" -> new CommandResult(false, formatTasks());
         case "help" -> new CommandResult(false, HELP);
         case "mark" -> updateTask(command.arguments(), true);
