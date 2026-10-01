@@ -4,6 +4,6 @@ package nga;
 public class NgaEnglish {
     /** Starts the English-language entry point. */
     public static void main(String[] args) {
-        new NgaUi(new NgaCommandHandler()).run();
+        new Nga().run();
     }
 }
