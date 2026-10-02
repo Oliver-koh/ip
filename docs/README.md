@@ -9,13 +9,16 @@ keeping track of todos, deadlines, and events.
 
 ## Adding deadlines
 
-// Describe the action and its outcome.
+Enter a date using `yyyy-MM-dd`, or enter a date and time using `d/M/yyyy HHmm`.
+For example:
 
-// Give examples of usage
+`deadline return book /by 2/12/2019 1800`
 
-Example: `keyword (optional arguments)`
+NGA stores the deadline as a typed date and time, then displays it as:
 
-// A description of the expected outcome goes here
+```
+[D][ ] return book (by: Dec 2 2019 6:00 PM)
+```
 
 ```
 expected output

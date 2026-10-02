@@ -1,20 +1,59 @@
 package nga;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Locale;
+
 /**
  * Represents a task that must be completed by a specified date or time.
  */
 public class Deadline extends Task {
-    private final String by;
+    private static final DateTimeFormatter DATE_ONLY_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("MMM d yyyy h:mm a", Locale.ENGLISH);
+    private static final DateTimeFormatter[] INPUT_FORMATTERS = {
+        DateTimeFormatter.ofPattern("d/M/uuuu HHmm"),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm"),
+        DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")
+    };
+    private final LocalDateTime by;
+    private final boolean hasExplicitTime;
 
     /** Creates an unfinished deadline with its description and due date/time. */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDateTime by, boolean hasExplicitTime) {
         super(description);
         this.by = by;
+        this.hasExplicitTime = hasExplicitTime;
     }
 
-    /** Returns the deadline date or time. */
-    public String getBy() {
+    /** Creates a deadline from a user-entered date or date/time. */
+    public static Deadline fromInput(String description, String input) throws TaskParseException {
+        String value = input.trim();
+        try {
+            for (DateTimeFormatter formatter : INPUT_FORMATTERS) {
+                try {
+                    return new Deadline(description, LocalDateTime.parse(value, formatter), true);
+                } catch (DateTimeParseException exception) {
+                    // Try the next supported date/time format.
+                }
+            }
+            return new Deadline(description, LocalDate.parse(value).atStartOfDay(), false);
+        } catch (DateTimeParseException exception) {
+            throw new TaskParseException(" Use: deadline task description /by yyyy-MM-dd [HHmm]");
+        }
+    }
+
+    /** Returns the typed deadline date and time. */
+    public LocalDateTime getBy() {
         return by;
+    }
+
+    /** Returns whether the user supplied an explicit time. */
+    public boolean hasExplicitTime() {
+        return hasExplicitTime;
     }
 
     /** Returns the deadline details used to identify duplicate tasks. */
@@ -32,6 +71,9 @@ public class Deadline extends Task {
     /** Returns this deadline in the format used by the chatbot. */
     @Override
     public String toString() {
-        return super.toString() + " (by: " + by + ")";
+        String formattedBy = hasExplicitTime
+                ? by.format(DATE_TIME_FORMATTER)
+                : by.format(DATE_ONLY_FORMATTER);
+        return super.toString() + " (by: " + formattedBy + ")";
     }
 }

@@ -46,7 +46,7 @@ public final class TaskParser {
         if (description.isEmpty() || by.isEmpty()) {
             throw new TaskParseException(" Use: deadline task description /by date or time");
         }
-        return new Deadline(description, by);
+        return Deadline.fromInput(description, by);
     }
 
     private static Task createEvent(String arguments) throws TaskParseException {

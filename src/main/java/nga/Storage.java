@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +58,10 @@ public class Storage {
     private String formatTask(Task task) {
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Deadline deadline) {
-            return String.join(" | ", "D", status, deadline.getDescription(), deadline.getBy());
+            String storedDate = deadline.hasExplicitTime()
+                    ? deadline.getBy().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                    : deadline.getBy().toLocalDate().toString();
+            return String.join(" | ", "D", status, deadline.getDescription(), storedDate);
         }
         if (task instanceof Event event) {
             return String.join(" | ", "E", status, event.getDescription(), event.getFrom(), event.getTo());
@@ -75,8 +82,7 @@ public class Storage {
         }
         Task task = switch (fields[0]) {
         case "T" -> fields.length == 3 && hasContent(fields[2]) ? new Todo(fields[2]) : null;
-        case "D" -> fields.length == 4 && hasContent(fields[2]) && hasContent(fields[3])
-                ? new Deadline(fields[2], fields[3]) : null;
+        case "D" -> parseDeadline(fields);
         case "E" -> fields.length == 5 && hasContent(fields[2]) && hasContent(fields[3]) && hasContent(fields[4])
                 ? new Event(fields[2], fields[3], fields[4]) : null;
         default -> null;
@@ -85,6 +91,20 @@ public class Storage {
             task.markAsDone();
         }
         return task;
+    }
+
+    private Task parseDeadline(String[] fields) {
+        if (fields.length != 4 || !hasContent(fields[2]) || !hasContent(fields[3])) {
+            return null;
+        }
+        try {
+            if (fields[3].contains("T")) {
+                return new Deadline(fields[2], LocalDateTime.parse(fields[3]), true);
+            }
+            return new Deadline(fields[2], LocalDate.parse(fields[3]).atStartOfDay(), false);
+        } catch (DateTimeParseException exception) {
+            return null;
+        }
     }
 
     private boolean isValidStatus(String status) {

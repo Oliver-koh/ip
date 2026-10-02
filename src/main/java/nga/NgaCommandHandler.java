@@ -6,7 +6,7 @@ public class NgaCommandHandler {
             + " Available commands:\n"
             + "   list\n       Lists all tasks.\n"
             + "   todo <description>\n       Adds a todo task.\n"
-            + "   deadline <description> /by <date or time>\n       Adds a deadline.\n"
+            + "   deadline <description> /by <date or time>\n       Adds a deadline. Use yyyy-MM-dd or d/M/yyyy HHmm.\n"
             + "   event <description> /from <start> /to <end>\n       Adds an event.\n"
             + "   mark <task number>\n       Marks a task as done.\n"
             + "   unmark <task number>\n       Marks a task as not done.\n"

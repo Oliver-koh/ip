@@ -9,7 +9,7 @@ Enter:
 
 ```text
 todo read book
-deadline return book /by June 6th
+deadline return book /by 2019-06-06 1800
 event project meeting /from Aug 6th 2pm /to 4pm
 mark 1
 unmark 1
@@ -25,7 +25,7 @@ Expected result:
 
 ```text
 T | 0 | read book
-D | 0 | return book | June 6th
+D | 0 | return book | 2019-06-06T18:00:00
 E | 0 | project meeting | Aug 6th 2pm | 4pm
 ```
 
