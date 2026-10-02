@@ -14,6 +14,7 @@ import java.util.List;
 /** Writes and loads Nga's task list in the project data directory. */
 public class Storage {
     private static final Path FILE_PATH = Path.of("data/nga.txt");
+    private int invalidTaskCount;
 
     /** Creates a storage component using Nga's default data file. */
     public Storage() {
@@ -48,25 +49,41 @@ public class Storage {
     /**
      * Loads saved tasks, returning an empty list when no data file exists.
      * Invalid rows are skipped so one malformed row does not prevent the rest from loading.
+     * The number of skipped rows is available through {@link #getInvalidTaskCount()}.
      *
      * @return the tasks read from the data file, or an empty list when loading fails
      */
     public List<Task> load() {
+        invalidTaskCount = 0;
         try {
             if (!Files.exists(FILE_PATH)) {
                 return new ArrayList<>();
             }
             List<Task> tasks = new ArrayList<>();
             for (String line : Files.readAllLines(FILE_PATH)) {
+                if (line == null || line.isBlank()) {
+                    continue;
+                }
                 Task task = parseTask(line);
                 if (task != null) {
                     tasks.add(task);
+                } else {
+                    invalidTaskCount++;
                 }
             }
             return tasks;
         } catch (IOException | SecurityException exception) {
             return new ArrayList<>();
         }
+    }
+
+    /**
+     * Returns the number of non-blank rows rejected during the most recent load.
+     *
+     * @return the number of invalid task rows skipped during the most recent load
+     */
+    public int getInvalidTaskCount() {
+        return invalidTaskCount;
     }
 
     /**

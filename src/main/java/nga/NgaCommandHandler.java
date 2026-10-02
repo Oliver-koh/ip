@@ -33,6 +33,8 @@ public class NgaCommandHandler {
             " Please use spaces as delimiters between commands and their arguments.";
     private final TaskList taskList;
     private final Storage storage;
+    private final int invalidTaskCount;
+    private boolean hasShownStorageWarning;
 
     /**
      * Creates a handler and restores saved tasks from storage when possible.
@@ -40,7 +42,9 @@ public class NgaCommandHandler {
     public NgaCommandHandler() {
         taskList = new TaskList();
         storage = new Storage();
-        for (Task task : storage.load()) {
+        List<Task> savedTasks = storage.load();
+        invalidTaskCount = storage.getInvalidTaskCount();
+        for (Task task : savedTasks) {
             if (!taskList.isFull()) {
                 taskList.add(task);
             }
@@ -56,10 +60,10 @@ public class NgaCommandHandler {
      */
     public CommandResult handle(String input) throws TaskParseException {
         if (input != null && input.contains("\t")) {
-            return new CommandResult(false, TAB_DELIMITER_ERROR);
+            return withStorageWarning(new CommandResult(false, TAB_DELIMITER_ERROR));
         }
         ParsedCommand command = CommandParser.parse(input);
-        return switch (command.keyword()) {
+        CommandResult result = switch (command.keyword()) {
         case "" -> new CommandResult(false, " Please enter something.");
         case "bye" -> new ExitCommand().execute(taskList, storage);
         case "list" -> new CommandResult(false, formatTasks());
@@ -72,6 +76,24 @@ public class NgaCommandHandler {
         case "todo", "deadline", "event" -> addTask(command);
         default -> new CommandResult(false, UNKNOWN_COMMAND);
         };
+        return withStorageWarning(result);
+    }
+
+    /**
+     * Adds the storage warning to the first response when invalid rows were skipped during startup.
+     *
+     * @param result the response for the current command
+     * @return the response with a one-time storage warning when needed
+     */
+    private CommandResult withStorageWarning(CommandResult result) {
+        if (invalidTaskCount == 0 || hasShownStorageWarning) {
+            return result;
+        }
+        hasShownStorageWarning = true;
+        String rowLabel = invalidTaskCount == 1 ? "row" : "rows";
+        String warning = " Warning: I skipped " + invalidTaskCount
+                + " invalid task " + rowLabel + " while loading data/nga.txt.";
+        return new CommandResult(result.shouldExit(), warning + "\n" + result.message());
     }
 
     /**
