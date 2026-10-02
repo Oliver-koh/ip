@@ -55,7 +55,8 @@ public class Deadline extends Task {
             }
             return new Deadline(description, LocalDate.parse(value).atStartOfDay(), false);
         } catch (DateTimeParseException exception) {
-            throw new TaskParseException(" Use: deadline task description /by yyyy-MM-dd [HHmm]");
+            throw new TaskParseException(" Use: deadline task description /by yyyy-MM-dd, d/M/yyyy HHmm, "
+                    + "yyyy-MM-dd HHmm, or yyyy-MM-dd HH:mm");
         }
     }
 

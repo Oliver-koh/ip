@@ -25,6 +25,8 @@ public class NgaCommandHandler {
             + "   java -jar build/libs/nga-all.jar";
     private static final String UNKNOWN_COMMAND =
             " Start command with a prefix/header. Use help for available commands and format.";
+    private static final String TAB_DELIMITER_ERROR =
+            " Please use spaces as delimiters between commands and their arguments.";
     private final TaskList taskList;
     private final Storage storage;
 
@@ -49,6 +51,9 @@ public class NgaCommandHandler {
      * @throws TaskParseException if a task command has invalid date or field syntax
      */
     public CommandResult handle(String input) throws TaskParseException {
+        if (input != null && input.contains("\t")) {
+            return new CommandResult(false, TAB_DELIMITER_ERROR);
+        }
         ParsedCommand command = CommandParser.parse(input);
         return switch (command.keyword()) {
         case "" -> new CommandResult(false, " Please enter something.");
