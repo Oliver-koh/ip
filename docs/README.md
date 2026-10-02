@@ -1,54 +1,94 @@
 # NGA User Guide
 
-NGA stands for **No Goobers Allowed**. NGA is a command-line task manager for
-keeping track of todos, deadlines, and events.
+NGA (**No Goobers Allowed**) is a friendly command-line task manager for
+todos, deadlines, and events.
 
-// Product screenshot goes here
+## Getting started
 
-// Product intro goes here
+NGA requires Java 25. From the project root, build and start the executable JAR:
 
-## Finding tasks
+```bash
+gradle clean shadowJar
+java -jar build/libs/nga-all.jar
+```
 
-Search for a keyword in task descriptions with the `find` command. The search
-is case-insensitive and matches the keyword anywhere in the description.
+You can also run `nga.Nga` directly from IntelliJ. Enter one command per line.
+Type `bye` when you are finished.
+
+## Commands
+
+| Command | What it does |
+| --- | --- |
+| `todo <description>` | Adds a task without a date or time. |
+| `deadline <description> /by <date or time>` | Adds a task with a deadline. |
+| `event <description> /from <start> /to <end>` | Adds an event with a time range. |
+| `list` | Displays all tasks in their current order. |
+| `find <keyword>` | Finds tasks whose descriptions contain the keyword. |
+| `mark <task number>` | Marks a task as done. |
+| `unmark <task number>` | Marks a task as not done. |
+| `delete <task number>` | Deletes one task. |
+| `delete all` or `clear` | Deletes every task. |
+| `help` | Shows the command summary. |
+| `bye` | Exits NGA. |
+
+Task numbers are the numbers shown by `list`, starting from 1.
+
+## Examples
+
+```text
+todo read Java chapter
+deadline submit report /by 2025-12-02 1800
+event project meeting /from Monday 2pm /to Monday 3pm
+list
+find report
+mark 1
+unmark 1
+delete 2
+```
+
+NGA displays tasks with a type and completion status:
+
+```text
+[T][ ] read Java chapter
+[D][X] submit report (by: Dec 2 2025 6:00 PM)
+[E][ ] project meeting (from: Monday 2pm to: Monday 3pm)
+```
+
+`T` means ToDo, `D` means deadline, and `E` means event. An `X` means the
+task is complete.
+
+## Deadline formats
+
+Deadlines accept these formats:
+
+```text
+yyyy-MM-dd
+d/M/yyyy HHmm
+yyyy-MM-dd HHmm
+yyyy-MM-dd HH:mm
+```
 
 For example:
 
-`find book`
-
-NGA displays the matching tasks in their original order:
-
-```
-Here are the matching tasks in your list:
-1.[T][X] read book
-2.[D][X] return book (by: Jun 6 2019)
+```text
+deadline return book /by 2025-12-02
+deadline attend appointment /by 2/12/2025 1800
 ```
 
-The `find` command does not change your task list. If no task description
-contains the keyword, NGA reports that no matching tasks were found.
+## Saving tasks
 
-## Adding deadlines
+Tasks are saved automatically to `data/nga.txt`. Run the JAR from the project
+root if you want the data file in the project folder; otherwise, `data/nga.txt`
+is created relative to the folder from which you started the JAR.
 
-Enter a date using `yyyy-MM-dd`, or enter a date and time using `d/M/yyyy HHmm`.
-For example:
+Tasks are restored automatically the next time NGA starts. If a saved row is
+invalid, NGA skips it, loads the other valid tasks, and displays a warning.
 
-`deadline return book /by 2/12/2019 1800`
+## Input rules
 
-NGA stores the deadline as a typed date and time, then displays it as:
-
-```
-[D][ ] return book (by: Dec 2 2019 6:00 PM)
-```
-
-```
-expected output
-```
-
-## Feature ABC
-
-// Feature details
-
-
-## Feature XYZ
-
-// Feature details
+- Use spaces, not tabs, between a command and its arguments.
+- Do not use the `|` character in task descriptions, deadline fields, or event
+  fields.
+- Empty descriptions, invalid task numbers, and unsupported deadline formats
+  are rejected with a helpful message.
+- Duplicate tasks are not added.
