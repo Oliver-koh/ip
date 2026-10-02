@@ -2,7 +2,7 @@
 
 ## Persistence test: automatic saving
 
-Compile and run Nga with Java 21 from the project root. Before starting, remove
+Compile and run Nga with Java 25 from the project root. Before starting, remove
 the existing `data/nga.txt` file so the test begins with a clean output file.
 
 Enter:

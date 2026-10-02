@@ -29,10 +29,10 @@ Prerequisites: JDK 21 and Gradle 9.2 or later. Update IntelliJ to the most recen
 ## Creating, rebuilding, and running the fat JAR
 
 Whenever you change the Java source code, rebuild the JAR before running it. From
-the project root, make sure Java 21 is selected and run:
+the project root, make sure Java 25 is selected and run:
 
 ```bash
-export JAVA_HOME="$(/usr/libexec/java_home -v 21)"
+export JAVA_HOME="$(/usr/libexec/java_home -v 25)"
 export PATH="$JAVA_HOME/bin:$PATH"
 gradle shadowJar
 ```
