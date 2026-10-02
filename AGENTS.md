@@ -26,7 +26,7 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 ## Java version:
 
-Ensure that Java 21 is used when running the application or build tasks. On this macOS machine, switch to the installed Temurin JDK with `export JAVA_HOME="$(/usr/libexec/java_home -v 21)"` and `export PATH="$JAVA_HOME/bin:$PATH"` if needed.
+Ensure that Java 25 is used when running the application or build tasks. On this macOS machine, switch to the installed JDK with `export JAVA_HOME="$(/usr/libexec/java_home -v 25)"` and `export PATH="$JAVA_HOME/bin:$PATH"` if needed.
 
 ## Git
 

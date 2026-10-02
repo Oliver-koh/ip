@@ -11,7 +11,11 @@ public class Task {
     private final String description;
     private boolean isDone;
 
-    /** Creates an unfinished task with the supplied description. */
+    /**
+     * Creates an unfinished task with the supplied description.
+     *
+     * @param description the text describing the work
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
@@ -27,14 +31,40 @@ public class Task {
         isDone = false;
     }
 
-    /** Returns {@code X} for a completed task or a space otherwise. */
+    /**
+     * Returns {@code X} for a completed task or a space otherwise.
+     *
+     * @return the one-character completion icon
+     */
     public String getStatusIcon() {
         return isDone ? "X" : " ";
     }
 
-    /** Returns the task description. */
+    /**
+     * Returns whether this task has been completed.
+     *
+     * @return {@code true} when the task is marked as done
+     */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /**
+     * Returns the task description.
+     *
+     * @return the task description
+     */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Returns the task details used to identify duplicate tasks.
+     *
+     * @return a key containing the task type and description
+     */
+    protected String getDuplicateKey() {
+        return getTaskType() + "|" + description;
     }
 
     /**
@@ -49,7 +79,11 @@ public class Task {
         return "T";
     }
 
-    /** Returns this task in the format used by the chatbot. */
+    /**
+     * Returns this task in the format used by the chatbot.
+     *
+     * @return the task type, completion icon, and description
+     */
     @Override
     public String toString() {
         return "[" + getTaskType() + "][" + getStatusIcon() + "] " + description;
