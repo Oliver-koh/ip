@@ -28,7 +28,9 @@ public class NgaCommandHandler {
     private final TaskList taskList;
     private final Storage storage;
 
-    /** Creates a handler with an empty task list. */
+    /**
+     * Creates a handler and restores saved tasks from storage when possible.
+     */
     public NgaCommandHandler() {
         taskList = new TaskList();
         storage = new Storage();
@@ -39,7 +41,13 @@ public class NgaCommandHandler {
         }
     }
 
-    /** Executes one command and returns text for the UI to display. */
+    /**
+     * Executes one command and returns text for the UI to display.
+     *
+     * @param input the raw command entered by the user
+     * @return the response message and whether the application should exit
+     * @throws TaskParseException if a task command has invalid date or field syntax
+     */
     public CommandResult handle(String input) throws TaskParseException {
         ParsedCommand command = CommandParser.parse(input);
         return switch (command.keyword()) {
@@ -57,6 +65,13 @@ public class NgaCommandHandler {
         };
     }
 
+    /**
+     * Creates and stores a task from a parsed task command.
+     *
+     * @param command the parsed task command
+     * @return the response describing the addition or the validation failure
+     * @throws TaskParseException if the task fields are invalid
+     */
     private CommandResult addTask(ParsedCommand command) throws TaskParseException {
         Task task = TaskParser.createTask(command.keyword(), command.arguments());
         int duplicateTaskNumber = taskList.findDuplicateTaskNumber(task);
@@ -71,11 +86,24 @@ public class NgaCommandHandler {
         return savedResult(addedTaskMessage(task));
     }
 
+    /**
+     * Builds the response shown after a task is added.
+     *
+     * @param task the newly added task
+     * @return the response containing the task and current list size
+     */
     private CommandResult addedTaskMessage(Task task) {
         return new CommandResult(false, " Got it. I've added this task:\n   " + task
                 + "\n Now you have " + taskList.size() + " tasks in the list.");
     }
 
+    /**
+     * Marks or unmarks a task selected by its one-based task number.
+     *
+     * @param argument the user-provided task number
+     * @param isDone whether the task should be marked done
+     * @return the response describing the update or validation failure
+     */
     private CommandResult updateTask(String argument, boolean isDone) {
         try {
             int taskNumber = Integer.parseInt(argument);
@@ -95,6 +123,12 @@ public class NgaCommandHandler {
         }
     }
 
+    /**
+     * Deletes one task or delegates to the all-tasks operation.
+     *
+     * @param argument a task number or the word {@code all}
+     * @return the response describing the deletion or validation failure
+     */
     private CommandResult deleteCommand(String argument) {
         if ("all".equalsIgnoreCase(argument)) {
             return clearTasks("");
@@ -112,6 +146,12 @@ public class NgaCommandHandler {
         }
     }
 
+    /**
+     * Removes every task when the clear command has no arguments.
+     *
+     * @param argument the text after the clear command
+     * @return the response describing the deletion or invalid arguments
+     */
     private CommandResult clearTasks(String argument) {
         if (!argument.isEmpty()) {
             return new CommandResult(false, " The clear command does not take any arguments.");
@@ -122,6 +162,11 @@ public class NgaCommandHandler {
                 + " tasks from your list."));
     }
 
+    /**
+     * Formats every stored task with its one-based display number.
+     *
+     * @return the task-list response text
+     */
     private String formatTasks() {
         StringBuilder output = new StringBuilder(" Here are the tasks in your list:");
         for (int taskNumber = 1; taskNumber <= taskList.size(); taskNumber++) {
@@ -130,6 +175,12 @@ public class NgaCommandHandler {
         return output.toString();
     }
 
+    /**
+     * Finds tasks whose descriptions contain the requested keyword.
+     *
+     * @param keyword the text to search for
+     * @return the matching tasks or a validation/no-results response
+     */
     private CommandResult findTasks(String keyword) {
         if (keyword.isBlank()) {
             return new CommandResult(false, " Please provide a keyword to search for.");
@@ -145,6 +196,12 @@ public class NgaCommandHandler {
         return new CommandResult(false, output.toString());
     }
 
+    /**
+     * Adds a warning when a successful task mutation could not be persisted.
+     *
+     * @param result the response for the in-memory mutation
+     * @return the original response, possibly with a save warning appended
+     */
     private CommandResult savedResult(CommandResult result) {
         if (storage.save(taskList)) {
             return result;

@@ -13,12 +13,21 @@ public class NgaUi {
     private final NgaCommandHandler commandHandler;
     private final Scanner scanner;
 
-    /** Creates a UI connected to standard input. */
+    /**
+     * Creates a UI connected to standard input.
+     *
+     * @param commandHandler the handler that processes user commands
+     */
     public NgaUi(NgaCommandHandler commandHandler) {
         this(commandHandler, new Scanner(System.in));
     }
 
-    /** Creates a UI with an injectable scanner for tests. */
+    /**
+     * Creates a UI with an injectable scanner for tests.
+     *
+     * @param commandHandler the handler that processes user commands
+     * @param scanner the source of user input
+     */
     public NgaUi(NgaCommandHandler commandHandler, Scanner scanner) {
         this.commandHandler = commandHandler;
         this.scanner = scanner;

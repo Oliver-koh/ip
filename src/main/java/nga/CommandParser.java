@@ -5,7 +5,12 @@ public final class CommandParser {
     private CommandParser() {
     }
 
-    /** Parses one input line without executing it. */
+    /**
+     * Parses one input line without executing it.
+     *
+     * @param input the raw line entered by the user
+     * @return the command keyword, arguments, and trimmed original input
+     */
     public static ParsedCommand parse(String input) {
         String original = input == null ? "" : input.trim();
         if (original.isEmpty()) {

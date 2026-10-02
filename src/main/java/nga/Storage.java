@@ -15,7 +15,16 @@ import java.util.List;
 public class Storage {
     private static final Path FILE_PATH = Path.of("data/nga.txt");
 
-    /** Saves the current tasks, replacing the previous contents of the file. */
+    /** Creates a storage component using Nga's default data file. */
+    public Storage() {
+    }
+
+    /**
+     * Saves the current tasks, replacing the previous contents of the file.
+     *
+     * @param taskList the tasks to serialize
+     * @return {@code true} if the file was written successfully
+     */
     public boolean save(TaskList taskList) {
         if (taskList == null) {
             return false;
@@ -36,7 +45,12 @@ public class Storage {
         }
     }
 
-    /** Loads saved tasks, returning an empty list when no data file exists. */
+    /**
+     * Loads saved tasks, returning an empty list when no data file exists.
+     * Invalid rows are skipped so one malformed row does not prevent the rest from loading.
+     *
+     * @return the tasks read from the data file, or an empty list when loading fails
+     */
     public List<Task> load() {
         try {
             if (!Files.exists(FILE_PATH)) {
@@ -55,6 +69,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Converts a task into the pipe-separated format used in the data file.
+     *
+     * @param task the task to serialize
+     * @return one storage row representing the task
+     */
     private String formatTask(Task task) {
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Deadline deadline) {
@@ -69,6 +89,12 @@ public class Storage {
         return String.join(" | ", "T", status, task.getDescription());
     }
 
+    /**
+     * Converts one storage row into a task when the row is valid.
+     *
+     * @param line the raw row read from the data file
+     * @return the parsed task, or {@code null} for an invalid row
+     */
     private Task parseTask(String line) {
         if (line == null || line.isBlank()) {
             return null;
@@ -93,6 +119,12 @@ public class Storage {
         return task;
     }
 
+    /**
+     * Parses the fields specific to a stored deadline.
+     *
+     * @param fields the split storage row, including its type and status
+     * @return the parsed deadline, or {@code null} when its date is invalid
+     */
     private Task parseDeadline(String[] fields) {
         if (fields.length != 4 || !hasContent(fields[2]) || !hasContent(fields[3])) {
             return null;
@@ -107,10 +139,22 @@ public class Storage {
         }
     }
 
+    /**
+     * Checks whether a stored status is one of the supported values.
+     *
+     * @param status the status field from a storage row
+     * @return {@code true} for an unfinished ({@code 0}) or completed ({@code 1}) status
+     */
     private boolean isValidStatus(String status) {
         return "0".equals(status) || "1".equals(status);
     }
 
+    /**
+     * Checks whether a storage field contains non-whitespace text.
+     *
+     * @param value the field to check
+     * @return {@code true} when the field is not null and is not blank
+     */
     private boolean hasContent(String value) {
         return value != null && !value.isBlank();
     }

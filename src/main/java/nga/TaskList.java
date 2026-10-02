@@ -9,17 +9,34 @@ public class TaskList {
     private static final int MAXIMUM_TASKS = 100;
     private final List<Task> tasks = new ArrayList<>();
 
-    /** Returns the number of stored tasks. */
+    /** Creates an empty task list. */
+    public TaskList() {
+    }
+
+    /**
+     * Returns the number of stored tasks.
+     *
+     * @return the number of tasks currently stored
+     */
     public int size() {
         return tasks.size();
     }
 
-    /** Returns whether the list cannot accept another task. */
+    /**
+     * Returns whether the list cannot accept another task.
+     *
+     * @return {@code true} when the maximum task count has been reached
+     */
     public boolean isFull() {
         return tasks.size() == MAXIMUM_TASKS;
     }
 
-    /** Adds a task to the end of the list. */
+    /**
+     * Adds a task to the end of the list.
+     *
+     * @param task the task to add
+     * @throws IllegalStateException if the list already contains its maximum number of tasks
+     */
     public void add(Task task) {
         if (isFull()) {
             throw new IllegalStateException("The task list is full.");
@@ -59,12 +76,23 @@ public class TaskList {
         return matchingTasks;
     }
 
-    /** Returns whether the one-based number identifies a stored task. */
+    /**
+     * Returns whether the one-based number identifies a stored task.
+     *
+     * @param taskNumber the user-facing task number to check
+     * @return {@code true} when the number identifies a task
+     */
     public boolean hasTaskNumber(int taskNumber) {
         return taskNumber >= 1 && taskNumber <= tasks.size();
     }
 
-    /** Returns the task identified by a valid one-based task number. */
+    /**
+     * Returns the task identified by a valid one-based task number.
+     *
+     * @param taskNumber the user-facing task number
+     * @return the identified task
+     * @throws IllegalArgumentException if the number does not identify a task
+     */
     public Task getTask(int taskNumber) {
         if (!hasTaskNumber(taskNumber)) {
             throw new IllegalArgumentException("Invalid task number.");
@@ -72,7 +100,13 @@ public class TaskList {
         return tasks.get(taskNumber - 1);
     }
 
-    /** Removes and returns the task identified by a valid one-based task number. */
+    /**
+     * Removes and returns the task identified by a valid one-based task number.
+     *
+     * @param taskNumber the user-facing task number
+     * @return the removed task
+     * @throws IllegalArgumentException if the number does not identify a task
+     */
     public Task removeTask(int taskNumber) {
         if (!hasTaskNumber(taskNumber)) {
             throw new IllegalArgumentException("Invalid task number.");

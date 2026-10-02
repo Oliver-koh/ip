@@ -22,14 +22,27 @@ public class Deadline extends Task {
     private final LocalDateTime by;
     private final boolean hasExplicitTime;
 
-    /** Creates an unfinished deadline with its description and due date/time. */
+    /**
+     * Creates an unfinished deadline with its description and due date/time.
+     *
+     * @param description the work to be completed
+     * @param by the date and time by which the work should be completed
+     * @param hasExplicitTime whether the user supplied a time as well as a date
+     */
     public Deadline(String description, LocalDateTime by, boolean hasExplicitTime) {
         super(description);
         this.by = by;
         this.hasExplicitTime = hasExplicitTime;
     }
 
-    /** Creates a deadline from a user-entered date or date/time. */
+    /**
+     * Creates a deadline from a user-entered date or date/time.
+     *
+     * @param description the work to be completed
+     * @param input the date or date/time in one of the supported formats
+     * @return an unfinished deadline parsed from the input
+     * @throws TaskParseException if the input is not a supported date or date/time
+     */
     public static Deadline fromInput(String description, String input) throws TaskParseException {
         String value = input.trim();
         try {
@@ -46,29 +59,49 @@ public class Deadline extends Task {
         }
     }
 
-    /** Returns the typed deadline date and time. */
+    /**
+     * Returns the typed deadline date and time.
+     *
+     * @return the deadline date and time
+     */
     public LocalDateTime getBy() {
         return by;
     }
 
-    /** Returns whether the user supplied an explicit time. */
+    /**
+     * Returns whether the user supplied an explicit time.
+     *
+     * @return {@code true} when the deadline includes a user-entered time
+     */
     public boolean hasExplicitTime() {
         return hasExplicitTime;
     }
 
-    /** Returns the deadline details used to identify duplicate tasks. */
+    /**
+     * Returns the deadline details used to identify duplicate tasks.
+     *
+     * @return a key containing the task description and deadline
+     */
     @Override
     protected String getDuplicateKey() {
         return super.getDuplicateKey() + "|" + by;
     }
 
-    /** Returns the type label for a deadline. */
+    /**
+     * Returns the type label for a deadline.
+     *
+     * @return {@code "D"}, the storage and display label for deadlines
+     */
     @Override
     public String getTaskType() {
         return "D";
     }
 
-    /** Returns this deadline in the format used by the chatbot. */
+    /**
+     * Returns this deadline in the format used by the chatbot.
+     *
+     * @return the task description followed by its formatted deadline
+     */
     @Override
     public String toString() {
         String formattedBy = hasExplicitTime
