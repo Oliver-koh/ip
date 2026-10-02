@@ -7,6 +7,26 @@ keeping track of todos, deadlines, and events.
 
 // Product intro goes here
 
+## Finding tasks
+
+Search for a keyword in task descriptions with the `find` command. The search
+is case-insensitive and matches the keyword anywhere in the description.
+
+For example:
+
+`find book`
+
+NGA displays the matching tasks in their original order:
+
+```
+Here are the matching tasks in your list:
+1.[T][X] read book
+2.[D][X] return book (by: Jun 6 2019)
+```
+
+The `find` command does not change your task list. If no task description
+contains the keyword, NGA reports that no matching tasks were found.
+
 ## Adding deadlines
 
 Enter a date using `yyyy-MM-dd`, or enter a date and time using `d/M/yyyy HHmm`.

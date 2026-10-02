@@ -1,10 +1,13 @@
 package nga;
 
+import java.util.List;
+
 /** Executes commands against the task list without reading console input. */
 public class NgaCommandHandler {
     private static final String HELP = " NGA means No Goobers Allowed.\n\n"
             + " Available commands:\n"
             + "   list\n       Lists all tasks.\n"
+            + "   find <keyword>\n       Finds tasks whose descriptions contain the keyword.\n"
             + "   todo <description>\n       Adds a todo task.\n"
             + "   deadline <description> /by <date or time>\n       Adds a deadline. Use yyyy-MM-dd or d/M/yyyy HHmm.\n"
             + "   event <description> /from <start> /to <end>\n       Adds an event.\n"
@@ -43,6 +46,7 @@ public class NgaCommandHandler {
         case "" -> new CommandResult(false, " Please enter something.");
         case "bye" -> new ExitCommand().execute(taskList, storage);
         case "list" -> new CommandResult(false, formatTasks());
+        case "find" -> findTasks(command.arguments());
         case "help" -> new CommandResult(false, HELP);
         case "mark" -> updateTask(command.arguments(), true);
         case "unmark" -> updateTask(command.arguments(), false);
@@ -124,6 +128,21 @@ public class NgaCommandHandler {
             output.append("\n ").append(taskNumber).append(".").append(taskList.getTask(taskNumber));
         }
         return output.toString();
+    }
+
+    private CommandResult findTasks(String keyword) {
+        if (keyword.isBlank()) {
+            return new CommandResult(false, " Please provide a keyword to search for.");
+        }
+        List<Task> matchingTasks = taskList.findTasks(keyword);
+        if (matchingTasks.isEmpty()) {
+            return new CommandResult(false, " No tasks found matching \"" + keyword + "\".");
+        }
+        StringBuilder output = new StringBuilder(" Here are the matching tasks in your list:");
+        for (int taskNumber = 0; taskNumber < matchingTasks.size(); taskNumber++) {
+            output.append("\n ").append(taskNumber + 1).append(".").append(matchingTasks.get(taskNumber));
+        }
+        return new CommandResult(false, output.toString());
     }
 
     private CommandResult savedResult(CommandResult result) {
